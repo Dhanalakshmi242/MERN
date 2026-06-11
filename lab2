@@ -1,0 +1,84 @@
+cmd
+mongosh
+use usermanaged
+db.transactions.insertMany([
+{
+    "Name": "Somu",
+    "Payment": {
+        "Total": 600,
+        "Mode": "UPI"
+    },
+    "Transaction": {
+        "price": 350,
+        "item": "Laptop Bag"
+    }
+},
+{
+    "Name": "Arun",
+    "Payment": {
+        "Total": 1200,
+        "Mode": "Card"
+    },
+    "Transaction": {
+        "price": 450,
+        "item": "Headphone"
+    }
+},
+{
+    "Name": "Priya",
+    "Payment": {
+        "Total": 800,
+        "Mode": "Cash"
+    },
+    "Transaction": {
+        "price": 250,
+        "item": "Mouse"
+    }
+},
+{
+    "Name": "Somu",
+    "Payment": {
+        "Total": 1500,
+        "Mode": "Net Banking"
+    },
+    "Transaction": {
+        "price": 500,
+        "item": "Keyboard"
+    }
+}
+])
+(a)
+db.transactions.find(
+{
+   "Name":"Somu"
+}
+)
+(b)
+db.transactions.find(
+{
+   "Payment.Total":600
+}
+)
+(c)
+db.transactions.find(
+{
+   "Transaction.price":
+   {
+      $gte:300,
+      $lte:500
+   }
+}
+)
+(d)
+db.transactions.aggregate([
+{
+   $group:
+   {
+      _id:null,
+      TotalTransactionAmount:
+      {
+         $sum:"$Payment.Total"
+      }
+   }
+}
+])
