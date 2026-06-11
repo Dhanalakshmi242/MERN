@@ -1,0 +1,84 @@
+npm install readline-sync
+
+app.js
+const fs = require('fs');
+const rl = require('readline-sync');
+
+const file = 'students.json';
+
+if (!fs.existsSync(file))
+    fs.writeFileSync(file, '[]');
+
+const read = () => JSON.parse(fs.readFileSync(file));
+const write = data => fs.writeFileSync(file, JSON.stringify(data, null, 2));
+
+while (true) {
+
+    console.log("\n===== STUDENT CRUD MENU =====");
+    console.log("1.Create Student");
+    console.log("2.Read All Students");
+    console.log("3.Update Student");
+    console.log("4.Delete Student");
+    console.log("5.Exit");
+
+    let ch = rl.questionInt("\nEnter Your Choice: ");
+    let students = read();
+
+    switch (ch) {
+
+        case 1:
+            students.push({
+                usn: rl.question("Enter USN: "),
+                name: rl.question("Enter Name: "),
+                sem: rl.questionInt("Enter Semester: "),
+                year_of_admission: rl.questionInt("Enter Year: ")
+            });
+            write(students);
+            console.log("Student Added Successfully");
+            break;
+
+        case 2:
+            students.length ?
+                console.table(students) :
+                console.log("No Records Found");
+            break;
+
+        case 3:
+            let u = rl.question("Enter USN to Update: ");
+            let s = students.find(x => x.usn === u);
+
+            if (!s) {
+                console.log("Student Not Found");
+                break;
+            }
+
+            s.name = rl.question("Enter New Name: ");
+            s.sem = rl.questionInt("Enter New Semester: ");
+            s.year_of_admission = rl.questionInt("Enter New Year: ");
+
+            write(students);
+            console.log("Student Updated Successfully");
+            break;
+
+        case 4:
+            let d = rl.question("Enter USN to Delete: ");
+            let n = students.filter(x => x.usn !== d);
+
+            if (n.length === students.length)
+                console.log("Student Not Found");
+            else {
+                write(n);
+                console.log("Student Deleted Successfully");
+            }
+            break;
+
+        case 5:
+            process.exit();
+
+        default:
+            console.log("Invalid Choice");
+    }
+}
+
+
+run:node app.js
