@@ -1,0 +1,21 @@
+create 01_transactions.json(file)
+create 01_transactions_upsert.json(file)
+mernlab(folder)inside it(2files)
+open cmd from tht folder mer_lab
+
+
+mongosh
+use usermanaged
+db.transactions.drop()
+db.createCollection("transactions")
+exit
+mongoimport --db usermanaged --collection transactions --file 01_transactions.json --jsonArray
+mongosh
+use usermanaged
+db.transactions.find()
+exit
+mongoimport --db usermanaged --collection transactions --file 01_transactions_upsert.json --jsonArray --mode upsert --upsertFields transaction_id
+mongosh
+use usermanaged
+db.transactions.find()
+exit
